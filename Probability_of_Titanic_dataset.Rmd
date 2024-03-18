@@ -9,21 +9,91 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+library(tidyverse)
+library(gt)
+library(gtsummary)
+library(skimr)
+library(tidymodels)
+library(modelsummary)
+library(equatiomatic)
+library(marginaleffects)
 ```
 
-## Including Plots
+```{r}
+ggplot2::theme_set(theme_bw())
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+color_1 = '#cc5058'
+color_2 = '#6250cc'
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+
+df <- train %>%
+  janitor::clean_names() %>%
+  mutate(across(all_of(c('sex', 'embarked')), ~ as.factor(.)))
+```
+
+
+```{r}
+df
+```
+
+
+
+```{r setup , echo=FALSE , warning=FALSE}
+
+library(reticulate)
+
+```
+
+```{r}
+Sys.setenv(RETICULATE_PYTHON = "C:/Users/limco/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Anaconda3 (64-bit)/Anaconda Navigator.lnk")
+
+```
+
+
+```{python}
+
+a = "¡Hola, mundo!"
+print(a)
+
+```
+
+```{r}
+df <- as.data.frame(df)
+```
+
+
+
+```{r}
+library(reticulate)
+
+# Pasar el dataframe de R a Python
+py$df <- df
+
+```
+
+
+```{python}
+# Mostrar las primeras filas del DataFrame
+print(df.head())
+```
+```{r}
+library(tidyverse)
+df <- df %>% 
+  mutate(survived = factor(survived, levels=c('0','1')))
+```
+
+
+```{r}
+df
+```
+
+```{r}
+df$survived %>% levels()
+```
+
+
+
